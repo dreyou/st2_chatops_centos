@@ -106,12 +106,35 @@ reset_six
 #st2 run packs.install packs=st2-ansible-aliases register=all repo_url=armab/st2-ansible-aliases
 st2 run packs.install packs=st2-chatops-aliases register=all repo_url=dreyou/st2-chatops-aliases
 sleep 20
-cd /opt/hubot
-nohup sh -c "ST2_AUTH_USERNAME=$BOTN ST2_AUTH_PASSWORD=$BOTP HUBOT_SLACK_TOKEN=$SLACK_TOKEN ST2_WEBUI_URL=http://localhost:8080 PORT=8181 bin/hubot --name stanley --adapter slack --alias ! "&
+#
+# Preparing and run hubot systemctl service
+#
+cat > /opt/hubot/hubot.env << EOF
+ST2_AUTH_USERNAME=$BOTN
+ST2_AUTH_PASSWORD=$BOTP
+HUBOT_SLACK_TOKEN=$SLACK_TOKEN
+ST2_WEBUI_URL=http://localhost:8080
+PORT=8181
+EOF
+cp -fv /opt/hubot/bin/hubot /opt/hubot/bin/hubot_systemctl
+sed -i 's@set -e@cd /opt/hubot\nset -e@' /opt/hubot/bin/hubot_systemctl
+cp -fv /vagrant/hubot.service /usr/lib/systemd/system/
+systemctl enable hubot.service
+systemctl daemon-reload
+systemctl start hubot.service
 sleep 20
+#
+# Send alive message
+#
 st2 run hubot.post_message channel=general message="I'm here"
-#cd /opt/hubot
-#nohup sh -c "ST2_AUTH_USERNAME=$BOTN ST2_AUTH_PASSWORD=$BOTP HUBOT_XMPP_USERNAME=bot1@bank.rpb.ru HUBOT_XMPP_ROOMS=chatops@conference.bank.rpb.ru HUBOT_XMPP_PASSWORD=Rhjrjlbk1 HUBOT_XMPP_HOST=logcollector PORT=8181 bin/hubot --name stanley --adapter xmpp --alias ! "&
+#
+# Example hubot startup with slack adapter
+#
+#cd /opt/hubot && ST2_AUTH_USERNAME=$BOTN ST2_AUTH_PASSWORD=$BOTP HUBOT_SLACK_TOKEN=$SLACK_TOKEN ST2_WEBUI_URL=http://localhost:8080 PORT=8181 bin/hubot --name stanley --adapter slack --alias !
+#
+# Example hubot startup with xmpp adapter
+#
+#cd /opt/hubot && ST2_AUTH_USERNAME=$BOTN ST2_AUTH_PASSWORD=$BOTP HUBOT_XMPP_USERNAME=bot1@bank.rpb.ru HUBOT_XMPP_ROOMS=chatops@conference.bank.rpb.ru HUBOT_XMPP_PASSWORD=Rhjrjlbk1 HUBOT_XMPP_HOST=logcollector PORT=8181 bin/hubot --name stanley --adapter xmpp --alias !
 #
 # Print execution time
 #

@@ -1,0 +1,6 @@
+activemq_servers_poll_enabled: False
+activemq_servers:
+  - url: "http://activemq-server:8161/admin/xml/queues.jsp"
+    user: "User"
+    passwd: "Password"
+    comment: "Test activemq server"

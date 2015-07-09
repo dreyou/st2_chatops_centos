@@ -1,0 +1,16 @@
+---
+name: on_event1
+description: Rule firing on st2_chatops_misc.event1 when queue size too much
+enabled: true
+trigger:
+    packs: "st2_chatops_misc"
+    type: "st2_chatops_misc.event1"
+criteria:
+    trigger.size:
+        pattern: 99
+        type: "gt"
+action:
+    ref: "hubot.post_message"
+    parameters:
+        message: "WARNING queue {{trigger.name}} size is {{trigger.size}}! Queue consumers  {{trigger.consumers}}, server: {{trigger.url}}, comment: {{trigger.comment}}"
+        channel: "general"

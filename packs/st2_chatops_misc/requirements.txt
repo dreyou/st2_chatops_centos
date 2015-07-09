@@ -1,0 +1,2 @@
+python-libxml2
+python-httplib2

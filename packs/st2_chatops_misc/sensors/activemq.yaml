@@ -1,0 +1,10 @@
+---
+class_name: "ActivemqSensor"
+entry_point: "activemq.py"
+description: "Sensor to control activemq queues"
+trigger_types:
+  -
+    name: "event1"
+    description: "Too much messages in queue."
+    payload_schema:
+      type: "object"

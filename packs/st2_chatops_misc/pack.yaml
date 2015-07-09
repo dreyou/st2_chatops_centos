@@ -1,0 +1,9 @@
+---
+name : st2_chatops_misc
+description : Miscellaneous chatops tools
+keywords:
+  - chatops
+  - activemq
+version : 0.1
+author : dreyou
+email : dreyou@gmail.com

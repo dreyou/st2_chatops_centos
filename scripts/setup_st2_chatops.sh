@@ -153,7 +153,6 @@ PORT=8181
 EOF
 cp -fv /opt/hubot/bin/hubot /opt/hubot/bin/hubot_systemctl
 sed -i 's@set -e@cd /opt/hubot\nset -e@' /opt/hubot/bin/hubot_systemctl
-cp -fv /vagrant/hubot.service /usr/lib/systemd/system/
 cat > /usr/lib/systemd/system/hubot.service << EOF
 [Unit]
 Description=Hubot instance daemon

@@ -1,9 +1,28 @@
 #!/bin/sh
+#
+# env file containing environment data must be put into ./data/ directory to vagrant provisioning
+# or it must be resided in same directory
+#
+# BOTN=bot name to connect to st2
+# BOTP=bot password
+# ACCN=account name to connect to st2
+# ACCP=accountpassword
+# SLACK_TOKEN=slack hubot integration tocken
+# ANSIBLE_HOSTS_URL=if set, download ansible hosts file from this url
+#
+if [[ -f /vagrant/env ]]
+then
+. /vagrant/env
+fi
+if [[ -f ./env ]]
+then
+. .env
+fi
 BOTN="${BOTN:-bot1}"
 BOTP="${BOTP:-Password}"
 ACCN="${ACCN:-admin}"
 ACCP="${ACCP:-Password}"
-SLACK_TOKEN="${SLACK_TOKEN:-xoxb-7202440977-diPqXLBhimB8aehG8TIKpmRE}"
+SLACK_TOKEN="${SLACK_TOKEN:-xoxb-You-Tocken}"
 SSTART=$(date +"%s")
 #
 # Force latest python six to all phython 2.7 installation
@@ -60,7 +79,7 @@ fi
 #
 # Install additional packages
 #
-yum -y install python-pip libicu-devel mlocate cowsay sshpass
+yum -y install python-pip libicu-devel mlocate cowsay sshpass xmlstarlet libxml2-python
 #
 # Replacing python-six to latest version
 #
@@ -94,11 +113,27 @@ sudo -H -u stanley bash -c 'cd /opt/hubot && echo "n" | yo hubot --name=stanley 
 sudo -H -u stanley bash -c 'cd /opt/hubot && npm install hubot-slack hubot-stackstorm --save'
 sudo -H -u stanley bash -c 'cd /opt/hubot && npm install hubot-xmpp --save'
 sed -i 's@.*\[.*@&\n  "hubot-stackstorm",@' /opt/hubot/external-scripts.json
-yum -y install ansible
-sed -i 's/#host_key_checking/host_key_checking/' /etc/ansible/ansible.cfg
-cp -f /vagrant/hosts /etc/ansible/hosts
 #
 # Install ansible to system
+#
+yum -y install ansible
+sed -i 's/#host_key_checking/host_key_checking/' /etc/ansible/ansible.cfg
+#
+# Copy ansible hosts file to /etc/ansible if present
+#
+if [[ -f /vagrant/hosts ]]
+then
+  cp -fv /vagrant/hosts /etc/ansible/hosts
+fi
+#
+# Download ansible hosts file to /etc/ansible if url present
+#
+if [[ "$ANSIBLE_HOSTS_URL" != "" ]]
+then
+  curl -o /etc/ansible/hosts $ANSIBLE_HOSTS_URL 
+fi
+#
+# Install chatops aliases to st2
 #
 yum -y install python-urllib*
 chown -R stanley:stanley /opt/hubot

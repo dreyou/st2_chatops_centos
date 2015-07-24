@@ -165,8 +165,8 @@ EnvironmentFile=/opt/hubot/hubot.env
 ExecStart=/opt/hubot/bin/hubot_systemctl --name stanley --adapter slack --alias !
 ExecReload=/bin/kill -HUP \$MAINPID
 KillMode=process
-Restart=on-failure
-RestartSec=42s
+Restart=always
+RestartSec=60s
 
 [Install]
 WantedBy=multi-user.target

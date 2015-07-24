@@ -140,6 +140,7 @@ chown -R stanley:stanley /opt/hubot
 reset_six
 #st2 run packs.install packs=st2-ansible-aliases register=all repo_url=armab/st2-ansible-aliases
 st2 run packs.install packs=st2-chatops-aliases register=all repo_url=dreyou/st2-chatops-aliases
+sleep 20
 st2 run packs.install packs=st2-chatops-misc register=all repo_url=dreyou/st2-chatops-misc
 sleep 20
 #

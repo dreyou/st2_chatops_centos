@@ -16,7 +16,7 @@ then
 fi
 if [[ -f ./env ]]
 then
-. .env
+. ./env
 fi
 BOTN="${BOTN:-bot1}"
 BOTP="${BOTP:-Password}"
@@ -79,7 +79,7 @@ fi
 #
 # Install additional packages
 #
-yum -y install python-pip libicu-devel mlocate cowsay sshpass xmlstarlet libxml2-python
+yum -y install python-pip libicu-devel mlocate cowsay sshpass libxml2-python
 #
 # Replacing python-six to latest version
 #
@@ -140,6 +140,7 @@ chown -R stanley:stanley /opt/hubot
 reset_six
 #st2 run packs.install packs=st2-ansible-aliases register=all repo_url=armab/st2-ansible-aliases
 st2 run packs.install packs=st2-chatops-aliases register=all repo_url=dreyou/st2-chatops-aliases
+st2 run packs.install packs=st2-chatops-misc register=all repo_url=dreyou/st2-chatops-misc
 sleep 20
 #
 # Preparing and run hubot systemctl service

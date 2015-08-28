@@ -44,7 +44,7 @@ reset_six(){
 #
 # Prepare repositories and packages
 #
-yum -y install epel-release vim-enhanced mc httpd-tools
+yum -y install epel-release vim-enhanced mc httpd-tools mariadb mariadb-server
 #
 # Deploing StackStorm
 #
@@ -60,7 +60,7 @@ sed -i "s/bash \${BOOTSTRAP_FILE} \${ST2VER}/sed -i \"s@service mysqld restart@s
 # Due to unknown mistall installation error, turning it off
 #
 export INSTALL_MISTRAL=0
-./st2_deploy.sh latest
+./st2_deploy.sh stable
 #
 # Correct st2ctl, htpasswd and configuring hubot access to StackStorm
 #
